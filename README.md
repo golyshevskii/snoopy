@@ -1,0 +1,2 @@
+# snoopy
+Crypto Snoopy Bot
