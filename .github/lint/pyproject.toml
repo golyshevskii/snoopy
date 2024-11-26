@@ -1,0 +1,35 @@
+[tool.poetry]
+name = "lint"
+version = "0.1.0"
+description = "Linting & Formatting"
+authors = ["Slava Golyshevskii <sgolyshevskii@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+black = "^24.10.0"
+flake8 = "^7.1.1"
+
+[tool.black]
+line-length = 110
+target-version = ['py39']
+skip-string-normalization = false
+skip-magic-trailing-comma = true
+exclude = '''
+  /(
+      \.eggs
+    | \.git
+    | \.hg
+    | \.mypy_cache
+    | \.tox
+    | \.venv
+    | _build
+    | buck-out
+    | build
+    | dist
+  )/
+  '''
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
