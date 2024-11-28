@@ -1,8 +1,9 @@
 import logging
 from telegram import Update
-from telegram.ext import ContextTypes
+from telegram.ext import ContextTypes, CallbackContext
 
 from logs.logger import get_logger
+from core.bots.menu import set_exchange_inline_menu
 from core.templates.button import BUTTON_MAP
 from core.templates.message import MESSAGE
 
@@ -18,3 +19,34 @@ async def handle_input(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     if text == BUTTON_MAP["commands"]:
         await update.message.reply_markdown_v2(MESSAGE["commands"])
+
+
+async def handle_exchange_selection(update: Update, context: CallbackContext):
+    """Handler for exchange selection"""
+    query = update.callback_query
+    await query.answer()
+
+    selected_exchanges = context.user_data.get("selected_exchanges", [])
+    exchange = query.data.split("_")[1]
+
+    if exchange in selected_exchanges:
+        selected_exchanges.remove(exchange)
+    else:
+        selected_exchanges.append(exchange)
+
+    context.user_data["selected_exchanges"] = selected_exchanges
+
+    reply_markup = await set_exchange_inline_menu(selected_exchanges)
+    await query.edit_message_reply_markup(reply_markup=reply_markup)
+
+
+async def hendle_confirm_exchanges(update: Update, context: CallbackContext):
+    """Handler for exchange selection confirmation"""
+    query = update.callback_query
+    await query.answer()
+
+    selected_exchanges = context.user_data.get("selected_exchanges", [])
+    logger.debug(
+        f"Selected exchanges by user {update.effective_user.username} ({update.effective_user.id}): {selected_exchanges}"
+    )
+    await query.edit_message_text(MESSAGE["confirm_exchanges"], reply_markup=None)
