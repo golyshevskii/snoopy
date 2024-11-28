@@ -1,7 +1,12 @@
 MESSAGE = {
-    "new_start": "Hi 👋 ↙",
-    "need_sub": "You need a subscription to collab with me",
-    "start": "Hi 👋\nReady to snipe?\nLet's set up the exchanges you want me to track ↙",
+    "new_start": (
+        "Yo, hi there 👋\n"
+        "I’m a bot that will help you snipe token listings on the exchanges you choose\.\n\n"
+        "To start collab with me, you need to subscribe 👇"
+    ),
+    "sub_start": "To start collab with me, you need to subscribe 👇",
+    "need_sub": "Your subscription has expired or is not valid 😵",
+    "start": "Hi 👋\nLet's go snipe!",
     "commands": """
 *Commands* ↙
 
