@@ -1,5 +1,14 @@
-MENU_BUTTON = ("commands",)
-INLINE_SUB_MENU_BUTTON = ("sub-1m", "faq")
-INLINE_EXCHANGE_MENU_BUTTON = ("BINANCE", "MEXC", "BYBIT")
+MENU_BUTTON = ("commands", "faq")
 
-BUTTON_MAP = {"commands": "Commands", "sub-1m": "1 Month – $1.49", "faq": "FAQ", "confirm": "Confirm"}
+INLINE_EXCHANGE_MENU_BUTTON = ("Binance", "Bybit", "OKX", "MEXC")
+INLINE_FAQ_MENU_BUTTON = ("faq_1", "faq_2", "faq_3")
+
+BUTTON_MAP = {
+    "commands": "Commands",
+    "sub-1m": "1 Month – $1.49",
+    "confirm": "✅ Confirm",
+    "faq": "FAQ",
+    "faq_1": "What is the bot?",
+    "faq_2": "How to use the bot?",
+    "faq_3": "How to setup the bot?",
+}

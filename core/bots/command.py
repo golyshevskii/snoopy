@@ -1,23 +1,19 @@
 import logging
-from telegram import Update, BotCommand
+from telegram import Update
 from telegram.ext import ContextTypes, CallbackContext
 
 from logs.logger import get_logger
 from core.bots.menu import set_menu, set_exchange_inline_menu
 from core.bots.wrapper import access
 from core.templates.message import MESSAGE
+from core.templates.command import NO_ACCESS_COMMANDS, HAS_ACCESS_COMMANDS
 
 logger = get_logger(__name__, level=logging.DEBUG)
 
-COMMANDS = [
-    BotCommand("start", "start the bot"),
-    BotCommand("setup", "set up the exchanges you want the bot to snipe"),
-]
 
-
-async def set_commands(context: ContextTypes.DEFAULT_TYPE):
+async def set_commands(context: ContextTypes.DEFAULT_TYPE, has_access: bool = False):
     """Sets the bot commands"""
-    await context.bot.set_my_commands(COMMANDS)
+    await context.bot.set_my_commands(HAS_ACCESS_COMMANDS if has_access else NO_ACCESS_COMMANDS)
 
 
 @access
@@ -26,8 +22,6 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_id = update.effective_user.id
     username = update.effective_user.username
     logger.debug(f"User {username} ({user_id}) started the bot")
-
-    await set_commands(context)
 
     reply_markup = await set_menu()
     await update.message.reply_markdown_v2(MESSAGE["start"], reply_markup=reply_markup)

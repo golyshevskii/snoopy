@@ -4,7 +4,12 @@ from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, Cal
 from config import SNOOPY_BOT_TOKEN
 from logs.logger import get_logger
 from core.bots.command import start, setup
-from core.bots.handler import handle_input, handle_exchange_selection, hendle_confirm_exchanges
+from core.bots.handler import (
+    handle_input,
+    handle_exchange_selection,
+    handle_confirm_exchanges,
+    handle_faq_question,
+)
 
 logger = get_logger(__name__, level=logging.DEBUG)
 
@@ -18,7 +23,8 @@ def run():
 
     app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_input))
     app.add_handler(CallbackQueryHandler(handle_exchange_selection, pattern="^exchange_"))
-    app.add_handler(CallbackQueryHandler(hendle_confirm_exchanges, pattern="^confirm_exchanges$"))
+    app.add_handler(CallbackQueryHandler(handle_confirm_exchanges, pattern="^confirm_exchanges$"))
+    app.add_handler(CallbackQueryHandler(handle_faq_question, pattern="^faq_"))
 
     app.run_polling()
     logger.debug("END")
