@@ -10,6 +10,7 @@ from core.bots.handler import (
     handle_confirm_exchanges,
     handle_faq_question,
 )
+from core.scripts.exchange.manager import snipe_listings
 
 logger = get_logger(__name__, level=logging.DEBUG)
 
@@ -25,6 +26,8 @@ def run():
     app.add_handler(CallbackQueryHandler(handle_exchange_selection, pattern="^exchange_"))
     app.add_handler(CallbackQueryHandler(handle_confirm_exchanges, pattern="^confirm_exchanges$"))
     app.add_handler(CallbackQueryHandler(handle_faq_question, pattern="^faq_"))
+
+    app.job_queue.run_repeating(snipe_listings, interval=30, first=0)
 
     app.run_polling()
     logger.debug("END")

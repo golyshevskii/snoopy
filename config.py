@@ -11,6 +11,7 @@ ADMIN_EMAIL = os.getenv("ENV_VAR_ADMIN_EMAIL")
 
 # DATA
 LOG_PATH = f"{BASE_DIR}/logs/"
+DATA_PATH = f"{BASE_DIR}/data/"
 MEXC_DATA_PATH = f"{BASE_DIR}/data/mexc/"
 
 # DWH
