@@ -3,7 +3,7 @@ from telegram import Update
 from telegram.ext import ContextTypes, CallbackContext
 
 from logs.logger import get_logger
-from core.bots.menu import set_menu, set_exchange_inline_menu
+from core.bots.menu import set_menu, set_setup_inline_menu
 from core.bots.wrapper import access
 from core.templates.message import MESSAGE
 from core.templates.command import NO_ACCESS_COMMANDS, HAS_ACCESS_COMMANDS
@@ -29,11 +29,11 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 @access
 async def setup(update: Update, context: CallbackContext):
-    """Setup exchanges command handler"""
-    if "selected_exchanges" not in context.user_data:
-        context.user_data["selected_exchanges"] = []
+    """Setup command handler"""
+    reply_markup = await set_setup_inline_menu()
 
-    selected_exchanges = context.user_data["selected_exchanges"]
-    reply_markup = await set_exchange_inline_menu(selected_exchanges)
-
-    await update.message.reply_markdown_v2(MESSAGE["select_exchanges"], reply_markup=reply_markup)
+    if update.message:
+        await update.message.reply_markdown_v2(MESSAGE["setup"], reply_markup=reply_markup)
+    elif update.callback_query:
+        await update.callback_query.answer()
+        await update.callback_query.edit_message_text(MESSAGE["setup"], reply_markup=reply_markup)
