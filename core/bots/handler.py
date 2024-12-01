@@ -3,7 +3,8 @@ from telegram import Update
 from telegram.ext import ContextTypes, CallbackContext
 
 from logs.logger import get_logger
-from core.bots.menu import set_exchange_inline_menu, set_faq_inline_menu
+from core.bots.command import setup
+from core.bots.menu import set_exchange_inline_menu, set_faq_inline_menu, set_coin_inline_menu
 from core.templates.button import BUTTON_MAP
 from core.templates.message import MESSAGE
 
@@ -41,21 +42,45 @@ async def handle_exchange_selection(update: Update, context: CallbackContext):
         selected_exchanges.append(exchange)
 
     context.user_data["selected_exchanges"] = selected_exchanges
+    await set_exchange_inline_menu(update, context)
 
-    reply_markup = await set_exchange_inline_menu(selected_exchanges)
-    await query.edit_message_reply_markup(reply_markup=reply_markup)
+
+async def handle_coin_selection(update: Update, context: CallbackContext):
+    """Handler for coin selection"""
+    query = update.callback_query
+    await query.answer()
+
+    selected_coins = context.user_data.get("selected_coins", [])
+    coin = query.data.split("_")[1]
+
+    if coin in selected_coins:
+        selected_coins.remove(coin)
+    else:
+        selected_coins.append(coin)
+
+    context.user_data["selected_coins"] = selected_coins
+    await set_coin_inline_menu(update, context)
 
 
 async def handle_confirm_exchanges(update: Update, context: CallbackContext):
     """Handler for exchange selection confirmation"""
     query = update.callback_query
     await query.answer()
+    await setup(update, context)
 
-    selected_exchanges = context.user_data.get("selected_exchanges", [])
-    logger.debug(
-        f"Selected exchanges by user {update.effective_user.username} ({update.effective_user.id}): {selected_exchanges}"
-    )
-    await query.edit_message_text(MESSAGE["confirm_exchanges"], reply_markup=None)
+
+async def handle_confirm_coins(update: Update, context: CallbackContext):
+    """Handler for coin selection confirmation"""
+    query = update.callback_query
+    await query.answer()
+    await setup(update, context)
+
+
+async def handle_confirm_setup(update: Update, context: CallbackContext):
+    """Handler for setup confirmation"""
+    query = update.callback_query
+    await query.answer()
+    await query.edit_message_text(MESSAGE["confirm_setup"], reply_markup=None)
 
 
 async def handle_faq_question(update: Update, context: CallbackContext):

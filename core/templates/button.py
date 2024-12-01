@@ -1,11 +1,15 @@
 MENU_BUTTON = ("commands", "faq")
 
+INLINE_SETUP_MENU_BUTTON = ("exchanges", "coins")
 INLINE_EXCHANGE_MENU_BUTTON = ("Binance", "Bybit", "OKX", "MEXC")
+INLINE_COIN_MENU_BUTTON = ("BTC", "ETH", "SOL", "WIF", "PEPE")
 INLINE_FAQ_MENU_BUTTON = ("faq_1", "faq_2", "faq_3")
 
 BUTTON_MAP = {
     "commands": "Commands",
     "sub-1m": "1 Month – $1.49",
+    "exchanges": "💰 Exchanges",
+    "coins": "₿ Coins",
     "confirm": "✅ Confirm",
     "faq": "FAQ",
     "faq_1": "What is the bot?",
