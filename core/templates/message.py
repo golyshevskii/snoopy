@@ -26,4 +26,6 @@ MESSAGE = {
     ),
     "faq_2": "You just need to setup the exchanges and coins you want the bot to snipe\.",
     "faq_3": "Use the command *\/setup* to set up the exchanges and coins you want the bot to snipe\.",
+    "0DIV": "🔻 DIVERGENCE \({interval}\)\n{exchange}: \#{symbol}",
+    "1DIV": "🔺 DIVERGENCE \({interval}\)\n{exchange}: \#{symbol}",
 }

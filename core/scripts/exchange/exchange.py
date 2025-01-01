@@ -16,5 +16,10 @@ class MEXCExchange(Exchange):
         return df
 
 
-EXCHANGES = {"MEXC": MEXCExchange}
-EXCHANGE_FUTURES_LINK_MAP = {"MEXC": "https://futures.mexc.com/ru-RU/exchange/"}
+EXCHANGES = {
+    "MEXC": {
+        "exchange_class": MEXCExchange,
+        "futures_symbols": ["BTC_USDT", "ETH_USDT", "SOL_USDT"],
+        "futures_link": "https://futures.mexc.com/ru-RU/exchange/",
+    }
+}

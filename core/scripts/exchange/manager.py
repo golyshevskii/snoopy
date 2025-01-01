@@ -2,13 +2,25 @@ import logging
 from telegram.ext import ContextTypes
 
 from logs.logger import get_logger
-from core.scripts.exchange.exchange import EXCHANGES, EXCHANGE_FUTURES_LINK_MAP
+from core.scripts.exchange.exchange import EXCHANGES
+from core.scripts.exchange.divergence import DIV
+from core.templates.message import MESSAGE
 
 logger = get_logger(__name__, level=logging.INFO)
 
 
-async def snipe_divergence(context: ContextTypes.DEFAULT_TYPE):
-    """Snipes divergence for selected symbols on selected exchanges."""
+async def snipe_futures_divergence(context: ContextTypes.DEFAULT_TYPE):
+    """Snipes futures divergence for selected symbols on selected exchanges."""
+    exdiv = dict().fromkeys(EXCHANGES.keys(), None)
+
+    for ex in exdiv:
+        exchange = EXCHANGES[ex]
+        div = DIV(exchange=exchange["exchange_class"])
+
+        for symbol in exchange["futures_symbols"]:
+            div.symbol = symbol
+            exdiv[ex][symbol]["result"] = await div.find()
+
     for chat_id, user_data in context.application.user_data.items():
         if "selected_exchanges" not in user_data and "selected_coins" not in user_data:
             continue
@@ -17,26 +29,14 @@ async def snipe_divergence(context: ContextTypes.DEFAULT_TYPE):
         selected_coins = user_data["selected_coins"]
 
         for ex in selected_exchanges:
-            client = EXCHANGES.get(ex)
+            for coin in selected_coins:
 
-            if not client:
-                logger.warning(f"The exchange {ex} is not supported. Skipping.")
-                continue
-
-            try:
-                symbols = await client.extract_symbols()
-                listings = await client.catch_listings(symbols)
-
-                ids = set()
-                for listing in listings:
+                result = exdiv[ex][coin]["result"]
+                if result:
                     await context.bot.send_message(
                         chat_id=chat_id,
-                        text=f"[{ex}]({EXCHANGE_FUTURES_LINK_MAP[ex]}{listing['symbol']}) → \#{listing['baseCoin']}",
+                        text=(MESSAGE["0DIV"] if result == 0 else MESSAGE["1DIV"]).format(
+                            exchange=ex, symbol=coin
+                        ),
                         parse_mode="MarkdownV2",
                     )
-                    ids.add(listing["id"])
-
-                await client.update_listed_coins(ids)
-
-            except Exception as e:
-                logger.error(f"Failed to snipe listings for {ex}. {e}")

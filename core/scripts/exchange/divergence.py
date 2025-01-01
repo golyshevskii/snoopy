@@ -1,3 +1,5 @@
+from typing import Optional
+
 from core.scripts.exchange.base import Exchange, Divergence
 
 
@@ -10,12 +12,12 @@ class DIV(Divergence):
         """
         super().__init__(symbol, exchange)
 
-    async def find(self):
+    async def find(self) -> Optional[int]:
         klines = await self.exchange.fetch_futures_klines(
             symbol=self.symbol, interval=self.interval, start=self.start, end=self.end
         )
 
-        results = {}
+        result = {}
         # TODO: Calculate divergence
 
-        return results
+        return result
