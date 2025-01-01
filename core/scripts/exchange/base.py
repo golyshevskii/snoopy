@@ -1,28 +1,51 @@
-from typing import Set
+from typing import Dict, List
 from abc import ABC, abstractmethod
-
-from config import DATA_PATH
-from core.scripts.tools.files import read_file, write_file
+from pandas import DataFrame
 
 
 class Exchange(ABC):
-    def __init__(self, name: str):
-        self.name = name
-        self.lname = name.lower()
-
-        self.listed_coins_file = f"{DATA_PATH}{self.lname}/{self.lname}_listed_coins.json"
-        self.listed_coins = set(read_file(self.listed_coins_file, is_json=True)["coins"])
-
-    @abstractmethod
-    async def extract_symbols(self):
-        pass
+    def __init__(self, exchange: str):
+        """
+        Params:
+            exchange: exchange name: "MEXC", "Binance"
+        """
+        self.exchange = exchange
 
     @abstractmethod
-    async def catch_listings(self):
-        pass
+    async def fetch_futures_klines(self, symbol: str, interval: str, start: int = None, end: int = None):
+        """
+        Fetches futures klines from the exchange.
 
-    async def update_listed_coins(self, ids: Set[int]):
-        write_file(self.listed_coins_file, {"coins": list(self.listed_coins | ids)}, is_json=True)
+        Params:
+            symbol: symbol name
+            interval: klines interval
+            start: timestamp from which to get klines
+            end: timestamp to which to get klines
+        """
+        pass
 
     def __str__(self):
-        return self.name
+        return self.exchange
+
+
+class Indicator(ABC):
+    @abstractmethod
+    async def compute(self, data: DataFrame) -> DataFrame:
+        """Computes indicator for the symbol."""
+        pass
+
+
+class Divergence(ABC):
+    def __init__(self, symbol: str, exchange: Exchange):
+        """
+        Params:
+            symbol: symbol name: "BTC_USDT", "ETHUSDT"
+            exchange: object Exchange
+        """
+        self.symbol = symbol
+        self.exchange = exchange
+
+    @abstractmethod
+    async def find(self, data: DataFrame) -> Dict[str, List[int]]:
+        """Catches divergence for the specified symbol and exchange."""
+        pass

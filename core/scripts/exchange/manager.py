@@ -2,24 +2,22 @@ import logging
 from telegram.ext import ContextTypes
 
 from logs.logger import get_logger
-from core.scripts.exchange.exs import MEXC
+from core.scripts.exchange.exchange import EXCHANGES, EXCHANGE_FUTURES_LINK_MAP
 
-logger = get_logger(__name__, level=logging.DEBUG)
-EX_LINK_MAP = {"MEXC": "https://futures.mexc.com/ru-RU/exchange/"}
+logger = get_logger(__name__, level=logging.INFO)
 
 
-async def snipe_listings(context: ContextTypes.DEFAULT_TYPE):
-    """Snipes listings for selected exchanges"""
-    exs = {"MEXC": MEXC()}
-
+async def snipe_divergence(context: ContextTypes.DEFAULT_TYPE):
+    """Snipes divergence for selected symbols on selected exchanges."""
     for chat_id, user_data in context.application.user_data.items():
-        if "selected_exchanges" not in user_data:
+        if "selected_exchanges" not in user_data and "selected_coins" not in user_data:
             continue
 
         selected_exchanges = user_data["selected_exchanges"]
+        selected_coins = user_data["selected_coins"]
 
         for ex in selected_exchanges:
-            client = exs.get(ex)
+            client = EXCHANGES.get(ex)
 
             if not client:
                 logger.warning(f"The exchange {ex} is not supported. Skipping.")
@@ -33,7 +31,7 @@ async def snipe_listings(context: ContextTypes.DEFAULT_TYPE):
                 for listing in listings:
                     await context.bot.send_message(
                         chat_id=chat_id,
-                        text=f"[{ex}]({EX_LINK_MAP[ex]}{listing['symbol']}) → #{listing['baseCoin']}",
+                        text=f"[{ex}]({EXCHANGE_FUTURES_LINK_MAP[ex]}{listing['symbol']}) → \#{listing['baseCoin']}",
                         parse_mode="MarkdownV2",
                     )
                     ids.add(listing["id"])
