@@ -34,6 +34,7 @@ async def snipe_listings(context: ContextTypes.DEFAULT_TYPE):
                     await context.bot.send_message(
                         chat_id=chat_id,
                         text=f"[{ex}]({EX_LINK_MAP[ex]}{listing['symbol']}) → #{listing['baseCoin']}",
+                        parse_mode="MarkdownV2",
                     )
                     ids.add(listing["id"])
 

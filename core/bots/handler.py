@@ -91,5 +91,5 @@ async def handle_faq_question(update: Update, context: CallbackContext):
     question = query.data
     logger.debug(f"User {update.effective_user.username} ({update.effective_user.id}) asked: {question}")
     await query.edit_message_text(
-        f">{BUTTON_MAP[question]}\n\n{MESSAGE[question]}", reply_markup=None, parse_mode="MarkdownV2"
+        f">{BUTTON_MAP[question]}\n\n\n{MESSAGE[question]}", reply_markup=None, parse_mode="MarkdownV2"
     )
