@@ -1,7 +1,7 @@
 MENU_BUTTON = ("commands", "faq")
 
 INLINE_SETUP_MENU_BUTTON = ("exchanges", "coins")
-INLINE_EXCHANGE_MENU_BUTTON = ("Binance", "MEXC")
+INLINE_EXCHANGE_MENU_BUTTON = ("MEXC",)
 INLINE_COIN_MENU_BUTTON = ("BTC", "ETH", "SOL")
 INLINE_FAQ_MENU_BUTTON = ("faq_1", "faq_2", "faq_3")
 

@@ -1,4 +1,3 @@
-import logging
 from telegram import Update
 from telegram.ext import ContextTypes, CallbackContext
 
@@ -8,7 +7,7 @@ from core.bots.wrapper import access
 from core.templates.message import MESSAGE
 from core.templates.command import NO_ACCESS_COMMANDS, HAS_ACCESS_COMMANDS
 
-logger = get_logger(__name__, level=logging.DEBUG)
+logger = get_logger(__name__)
 
 
 async def set_commands(context: ContextTypes.DEFAULT_TYPE, has_access: bool = False):

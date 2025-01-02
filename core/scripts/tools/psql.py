@@ -1,4 +1,3 @@
-import logging
 import psycopg2
 import sshtunnel
 import pandas as pd
@@ -10,7 +9,7 @@ from logs.logger import get_logger
 from core.scripts.tools.files import read_file
 
 
-logger = get_logger(__name__, level=logging.DEBUG)
+logger = get_logger(__name__)
 
 
 class PSQLClient:

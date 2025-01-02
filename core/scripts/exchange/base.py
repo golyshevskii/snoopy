@@ -12,7 +12,7 @@ class Exchange(ABC):
         self.exchange = exchange
 
     @abstractmethod
-    async def fetch_futures_klines(self, symbol: str, interval: str, start: int = None, end: int = None):
+    def fetch_futures_klines(self, symbol: str, interval: str, start: int = None, end: int = None):
         """
         Fetches futures klines from the exchange.
 
@@ -36,16 +36,20 @@ class Indicator(ABC):
 
 
 class Divergence(ABC):
-    def __init__(self, symbol: str, exchange: Exchange):
+    def __init__(self, symbol: str, exchange: Exchange, interval_int: int, interval_str: str):
         """
         Params:
             symbol: symbol name: "BTC_USDT", "ETHUSDT"
             exchange: object Exchange
+            interval_int: 900, 1800, 3600, 14400
+            interval_str: string representation of interval based on exchange
         """
         self.symbol = symbol
         self.exchange = exchange
+        self.interval_int = interval_int
+        self.interval_str = interval_str
 
     @abstractmethod
-    async def find(self, data: DataFrame) -> Dict[str, List[int]]:
+    def find(self, data: DataFrame) -> Dict[str, List[int]]:
         """Catches divergence for the specified symbol and exchange."""
         pass

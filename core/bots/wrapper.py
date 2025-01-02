@@ -1,4 +1,3 @@
-import logging
 import asyncio
 from functools import wraps
 from datetime import datetime, timezone
@@ -9,7 +8,7 @@ from core.scripts.dwh.manager import insert_user, select_user
 from core.templates.message import MESSAGE
 from core.templates.command import NO_ACCESS_COMMANDS, HAS_ACCESS_COMMANDS
 
-logger = get_logger(__name__, level=logging.DEBUG)
+logger = get_logger(__name__)
 
 
 async def on_empty(update):
