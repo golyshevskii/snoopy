@@ -8,7 +8,7 @@ from core.scripts.mexc.api import get_spot_info, get_futures_info, get_futures_k
 from core.scripts.mexc.utils import MEXC_INTERVAL_KLINE_DEPTH
 from core.scripts.tools.files import write_file
 
-logger = get_logger(__name__, level=logging.DEBUG)
+logger = get_logger(__name__, level=logging.INFO)
 
 
 async def import_spot_info() -> Dict[str, Any]:

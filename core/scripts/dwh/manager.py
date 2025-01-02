@@ -1,13 +1,9 @@
-import logging
 import pandas as pd
 from typing import Any, Dict, Union, List
 
 from config import DWH_CONN_STR
-from logs.logger import get_logger
 from core.scripts.tools.psql import PSQLClient
 from core.scripts.dwh.table_map import RAW
-
-logger = get_logger(__name__, level=logging.DEBUG)
 
 DWH = PSQLClient(DWH_CONN_STR)
 

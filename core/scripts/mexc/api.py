@@ -1,11 +1,10 @@
-import logging
 from pymexc import spot, futures
 from typing import List, Dict, Any
 
 from config import MEXC_API_ACCESS_KEY, MEXC_API_SECRET_KEY
 from logs.logger import get_logger
 
-logger = get_logger(__name__, level=logging.DEBUG)
+logger = get_logger(__name__)
 
 SPOT = spot.HTTP(api_key=MEXC_API_ACCESS_KEY, api_secret=MEXC_API_SECRET_KEY)
 FUTURES = futures.HTTP(api_key=MEXC_API_ACCESS_KEY, api_secret=MEXC_API_SECRET_KEY)

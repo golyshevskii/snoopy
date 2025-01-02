@@ -1,4 +1,3 @@
-import logging
 from telegram import Update
 from telegram.ext import ContextTypes, CallbackContext
 
@@ -8,7 +7,7 @@ from core.bots.menu import set_exchange_inline_menu, set_faq_inline_menu, set_co
 from core.templates.button import BUTTON_MAP
 from core.templates.message import MESSAGE
 
-logger = get_logger(__name__, level=logging.DEBUG)
+logger = get_logger(__name__)
 
 
 async def handle_input(update: Update, context: ContextTypes.DEFAULT_TYPE):

@@ -1,4 +1,3 @@
-import logging
 from telegram.ext import ApplicationBuilder, CommandHandler, MessageHandler, CallbackQueryHandler, filters
 
 from config import SNOOPY_BOT_TOKEN
@@ -14,9 +13,9 @@ from core.bots.handler import (
     handle_confirm_setup,
     handle_faq_question,
 )
-from core.scripts.exchange.manager import snipe_listings
+from core.scripts.exchange.manager import snipe_futures_divergence
 
-logger = get_logger(__name__, level=logging.DEBUG)
+logger = get_logger(__name__)
 
 
 def run():
@@ -38,7 +37,10 @@ def run():
 
     app.add_handler(CallbackQueryHandler(handle_faq_question, pattern="^faq_"))
 
-    app.job_queue.run_repeating(snipe_listings, interval=30, first=0)
+    app.job_queue.run_repeating(snipe_futures_divergence, interval=15, first=0, data={"interval": 900})
+    app.job_queue.run_repeating(snipe_futures_divergence, interval=1800, first=0, data={"interval": 1800})
+    app.job_queue.run_repeating(snipe_futures_divergence, interval=3600, first=0, data={"interval": 3600})
+    app.job_queue.run_repeating(snipe_futures_divergence, interval=14400, first=0, data={"interval": 14400})
 
     app.run_polling()
     logger.debug("END")
