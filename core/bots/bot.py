@@ -37,10 +37,10 @@ def run():
 
     app.add_handler(CallbackQueryHandler(handle_faq_question, pattern="^faq_"))
 
-    app.job_queue.run_repeating(snipe_futures_divergence, interval=15, first=0, data={"interval": 900})
-    app.job_queue.run_repeating(snipe_futures_divergence, interval=1800, first=0, data={"interval": 1800})
-    app.job_queue.run_repeating(snipe_futures_divergence, interval=3600, first=0, data={"interval": 3600})
-    app.job_queue.run_repeating(snipe_futures_divergence, interval=14400, first=0, data={"interval": 14400})
+    app.job_queue.run_repeating(snipe_futures_divergence, interval=905, first=0, data={"interval": 900})
+    app.job_queue.run_repeating(snipe_futures_divergence, interval=1805, first=0, data={"interval": 1800})
+    app.job_queue.run_repeating(snipe_futures_divergence, interval=3605, first=0, data={"interval": 3600})
+    app.job_queue.run_repeating(snipe_futures_divergence, interval=14405, first=0, data={"interval": 14400})
 
     app.run_polling()
     logger.debug("END")

@@ -1,5 +1,7 @@
 from core.scripts.mexc.api import get_futures_klines
 from core.scripts.exchange.base import Exchange
+from core.scripts.exchange.divergence import RSIMACDDivergence
+from core.scripts.exchange.indicator import RSII, MACDI
 from core.scripts.exchange.utils import klines_to_df
 
 
@@ -19,6 +21,13 @@ class MEXCExchange(Exchange):
 EXCHANGES = {
     "MEXC": {
         "exchange_class": MEXCExchange(),
+        "indicators": [
+            RSII(period=14, col_name="rsi"),
+            MACDI(fast=12, slow=26, signal=9, hist_col="macd_hist"),
+        ],
+        "divergence": RSIMACDDivergence(
+            price_col="close", rsi_col="rsi", macd_hist_col="macd_hist", order=3, max_candle_diff=2
+        ),
         "futures_symbols": ["BTC_USDT", "ETH_USDT", "SOL_USDT"],
         "futures_link": "https://futures.mexc.com/ru-RU/exchange/",
         "intervals": {900: "Min15", 1800: "Min30", 3600: "Hour1", 14400: "Hour4"},

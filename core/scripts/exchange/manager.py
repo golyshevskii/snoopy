@@ -5,7 +5,7 @@ from telegram.ext import ContextTypes
 
 from logs.logger import get_logger
 from core.scripts.exchange.exchange import EXCHANGES
-from core.scripts.exchange.divergence import DIV
+from core.scripts.exchange.divergence import DIVFutures
 from core.templates.message import MESSAGE
 
 logger = get_logger(__name__, level=logging.INFO)
@@ -22,11 +22,13 @@ async def snipe_futures_divergence(context: ContextTypes.DEFAULT_TYPE):
         exchange = EXCHANGES[ex]
         exchange_div[ex] = dict().fromkeys(exchange["futures_symbols"], None)
 
-        div = DIV(
+        div = DIVFutures(
             symbol=None,
             exchange=exchange["exchange_class"],
             interval_int=interval,
             interval_str=exchange["intervals"][interval],
+            indicators=exchange["indicators"],
+            divergence=exchange["divergence"],
         )
 
         for symbol in exchange["futures_symbols"]:
