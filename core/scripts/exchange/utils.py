@@ -2,7 +2,7 @@ import pandas as pd
 from typing import Dict, List
 
 
-async def klines_to_df(
+def klines_to_df(
     klines: Dict[str, List[int | float]], time_column_name: str, time_unit: str = "ms"
 ) -> pd.DataFrame:
     """

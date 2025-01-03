@@ -5,7 +5,7 @@ from telegram.ext import ContextTypes
 
 from logs.logger import get_logger
 from core.scripts.exchange.exchange import EXCHANGES
-from core.scripts.exchange.divergence import DIV
+from core.scripts.exchange.divergence import DIVFutures
 from core.templates.message import MESSAGE
 
 logger = get_logger(__name__, level=logging.INFO)
@@ -20,18 +20,20 @@ async def snipe_futures_divergence(context: ContextTypes.DEFAULT_TYPE):
 
     for ex in EXCHANGES.keys():
         exchange = EXCHANGES[ex]
-        exchange_div[ex] = dict().fromkeys(exchange["futures_symbols"], None)
+        exchange_div[ex] = dict()
 
-        div = DIV(
+        div = DIVFutures(
             symbol=None,
             exchange=exchange["exchange_class"],
             interval_int=interval,
             interval_str=exchange["intervals"][interval],
+            indicators=exchange["indicators"],
+            divergence=exchange["divergence"],
         )
 
         for symbol in exchange["futures_symbols"]:
             div.symbol = symbol
-            exchange_div[ex][re.sub(r"_?USDT$", "", symbol)] = (div.find(), interval)
+            exchange_div[ex][re.sub(r"_?USDT$", "", symbol)] = div.find()
 
             await asyncio.sleep(0.2)
 
@@ -50,7 +52,7 @@ async def snipe_futures_divergence(context: ContextTypes.DEFAULT_TYPE):
                     await context.bot.send_message(
                         chat_id=chat_id,
                         text=(MESSAGE["0DIV"] if result == 0 else MESSAGE["1DIV"]).format(
-                            exchange=f"\[{ex}\]\({EXCHANGES[ex]['futures_link']}\)",
+                            exchange=EXCHANGES[ex]["futures_link"].format(symbol=coin),
                             interval=INTERVALS[interval],
                             symbol=coin,
                         ),

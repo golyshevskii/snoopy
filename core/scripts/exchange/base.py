@@ -1,4 +1,4 @@
-from typing import Dict, List
+from typing import Optional
 from abc import ABC, abstractmethod
 from pandas import DataFrame
 
@@ -30,8 +30,8 @@ class Exchange(ABC):
 
 class Indicator(ABC):
     @abstractmethod
-    async def compute(self, data: DataFrame) -> DataFrame:
-        """Computes indicator for the symbol."""
+    def calculate(self, df: DataFrame) -> DataFrame:
+        """Calculates indicator for the symbol."""
         pass
 
 
@@ -50,6 +50,6 @@ class Divergence(ABC):
         self.interval_str = interval_str
 
     @abstractmethod
-    def find(self, data: DataFrame) -> Dict[str, List[int]]:
-        """Catches divergence for the specified symbol and exchange."""
+    def detect(self, data: DataFrame) -> Optional[int]:
+        """Detects divergence for the specified symbol and exchange."""
         pass
