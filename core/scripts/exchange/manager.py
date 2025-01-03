@@ -20,7 +20,7 @@ async def snipe_futures_divergence(context: ContextTypes.DEFAULT_TYPE):
 
     for ex in EXCHANGES.keys():
         exchange = EXCHANGES[ex]
-        exchange_div[ex] = dict().fromkeys(exchange["futures_symbols"], None)
+        exchange_div[ex] = dict()
 
         div = DIVFutures(
             symbol=None,
@@ -33,7 +33,7 @@ async def snipe_futures_divergence(context: ContextTypes.DEFAULT_TYPE):
 
         for symbol in exchange["futures_symbols"]:
             div.symbol = symbol
-            exchange_div[ex][re.sub(r"_?USDT$", "", symbol)] = (div.find(), interval)
+            exchange_div[ex][re.sub(r"_?USDT$", "", symbol)] = div.find()
 
             await asyncio.sleep(0.2)
 
@@ -52,7 +52,7 @@ async def snipe_futures_divergence(context: ContextTypes.DEFAULT_TYPE):
                     await context.bot.send_message(
                         chat_id=chat_id,
                         text=(MESSAGE["0DIV"] if result == 0 else MESSAGE["1DIV"]).format(
-                            exchange=f"\[{ex}\]\({EXCHANGES[ex]['futures_link']}\)",
+                            exchange=EXCHANGES[ex]["futures_link"].format(symbol=coin),
                             interval=INTERVALS[interval],
                             symbol=coin,
                         ),

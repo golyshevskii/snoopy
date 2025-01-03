@@ -29,7 +29,7 @@ class RSIMACDDivergence(Divergence):
             or self.macd_hist_col not in df.columns
         ):
             logger.warning(
-                "Not enough columns to calculate divergence. Please check: price_col, rsi_col, macd_hist_col"
+                "Not enough columns to calculate divergence. Please check: price_col, rsi_col, macd_hist_col."
             )
             return
 
@@ -119,7 +119,10 @@ class DIVFutures:
             indicators: list of indicators to use to catch divergence
             divergence: Divergence object to catch divergence
         """
-        super().__init__(symbol, exchange, interval_int, interval_str)
+        self.symbol = symbol
+        self.exchange = exchange
+        self.interval_int = interval_int
+        self.interval_str = interval_str
         self.indicators = indicators
         self.divergence = divergence
 

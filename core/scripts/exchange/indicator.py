@@ -11,7 +11,6 @@ class RSII(Indicator):
         self.col_name = col_name
 
     def calculate(self, df: pd.DataFrame) -> pd.DataFrame:
-        df = df.copy()
         rsi_calc = RSIIndicator(close=df["close"], window=self.period)
         df[self.col_name] = rsi_calc.rsi()
         return df
@@ -25,7 +24,6 @@ class MACDI(Indicator):
         self.hist_col = hist_col
 
     def calculate(self, df: pd.DataFrame) -> pd.DataFrame:
-        df = df.copy()
         macd_calc = MACD(
             close=df["close"], window_slow=self.slow, window_fast=self.fast, window_sign=self.signal
         )
