@@ -20,7 +20,6 @@ class MEXCExchange(Exchange):
             raise Exception(f"{klines}")
 
         df = klines_to_df(klines["data"], time_column_name="time", time_unit="s")
-        logger.info(f"Klines have been fetched. Shape: {df.shape}")
         return df
 
 
