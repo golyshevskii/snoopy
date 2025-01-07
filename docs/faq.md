@@ -12,3 +12,9 @@
 > How to setup the bot?
 
     Use the command /setup to set up the exchanges and coins you want the bot to snipe.
+
+
+Snipe example
+---
+
+[![Snipe Example](snipe-example.png)](https://t.me/CSnoopyBot)
