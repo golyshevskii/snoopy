@@ -138,7 +138,7 @@ class DIVFutures:
         )
 
         if klines.empty:
-            logger.info(f"No klines for {self.symbol} in {self.interval_str}")
+            logger.warning(f"No klines for {self.symbol} in {self.interval_str}")
             return
 
         for ind in self.indicators:

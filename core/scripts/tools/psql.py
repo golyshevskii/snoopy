@@ -89,10 +89,10 @@ class PSQLClient:
 
             if select:
                 data = pd.read_sql(sql=text(sql), con=connection)
-                logger.info(f"Data has been extracted. Shape: {data.shape}")
+                logger.debug(f"Data has been extracted. Shape: {data.shape}")
             else:
                 result = connection.execute(text(sql))
-                logger.info(f"SQL has been executed. Effected rows: {result.rowcount}")
+                logger.debug(f"SQL has been executed. Effected rows: {result.rowcount}")
         self._disconnect()
 
         return data

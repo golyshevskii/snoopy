@@ -13,6 +13,7 @@ from core.bots.handler import (
     handle_confirm_setup,
     handle_faq_question,
 )
+from core.bots.utils import INTERVALS, get_first_run_time
 from core.scripts.exchange.manager import snipe_futures_divergence
 
 logger = get_logger(__name__)
@@ -37,10 +38,14 @@ def run():
 
     app.add_handler(CallbackQueryHandler(handle_faq_question, pattern="^faq_"))
 
-    app.job_queue.run_repeating(snipe_futures_divergence, interval=901, first=0, data={"interval": 900})
-    app.job_queue.run_repeating(snipe_futures_divergence, interval=1801, first=0, data={"interval": 1800})
-    app.job_queue.run_repeating(snipe_futures_divergence, interval=3601, first=0, data={"interval": 3600})
-    app.job_queue.run_repeating(snipe_futures_divergence, interval=14401, first=0, data={"interval": 14400})
+    for interval in INTERVALS:
+        first_run = get_first_run_time(interval)
+        app.job_queue.run_repeating(
+            snipe_futures_divergence,
+            interval=interval * 60,
+            first=first_run,
+            data={"interval": interval * 60},
+        )
 
     app.run_polling()
     logger.debug("END")
